@@ -1,0 +1,42 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+	
+<!-- 	datasource or connection pool -->
+	<bean id="dbs" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource.getConnection">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1522:orcl"/>
+		<property name="username" value="system"/>
+		<property name="password" value="delfina"/>
+		<property name="maxActive" value="18"/>
+		<property name="maxIdle" value="2"/>
+		<property name="maxWait" value="15000"/>
+	</bean>
+
+<!-- 	annotation mappings session factory -->
+	<bean id="sf" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="datasource" ref="bds"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<prop key="show_sql">true</prop>
+			</props>
+		</property>
+		<property name="annotatedClases">
+			<list>
+				<value>com.jl.ems.model.Employee</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="ht" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="lsf" />
+	</bean>
+
+	<bean id="dao" class="com.jl.ems.dao.EmployeeDao">
+		<property name="ht" ref="ht" />
+	</bean>
+
+</beans>
